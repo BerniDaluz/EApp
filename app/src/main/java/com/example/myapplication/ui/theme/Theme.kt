@@ -1,4 +1,4 @@
-package com.example.myapplication.ui.theme
+package com.example.myapplication.ui
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
@@ -47,7 +47,7 @@ object EnvironmentalColors {
 
 }
 //darkcolor scheme for the app
-private val DarkColorCheme = darkColorScheme(
+private val DarkColorScheme = darkColorScheme(
     //primary color - buttons -highlights- imp elements
     primary = EnvironmentalColors.CyanAccent,
 
@@ -71,12 +71,12 @@ private val DarkColorCheme = darkColorScheme(
 
 )
 
-@Composable
 //content displayed inside theme
+@Composable
 fun EnvironmentalMonitoringTheme(content: @Composable () -> Unit){
     //apply dark color scheme - martial design theme
     MaterialTheme(
-        colorScheme = DarkColorCheme,
+        colorScheme = DarkColorScheme,
         content = content
     )
 }

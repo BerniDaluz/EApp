@@ -2,8 +2,6 @@ package com.example.myapplication
 
 
 import android.os.Bundle
-import android.os.Environment
-import android.text.BoringLayout
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -13,27 +11,25 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.myapplication.ui.AQIGauge
-import com.myapplication.ui.DashboardCard
-import com.myapplication.ui.EnvironmentalColors
-import com.myapplication.ui.EnvironmentalMonitoringTheme
-import com.myapplication.ui.MetricCard
-import com.myapplication.ui.SimpleLineChart
-import kotlinx.coroutines.newFixedThreadPoolContext
+import com.example.myapplication.ui.AQIGauge
+import com.example.myapplication.ui.DashboardCard
+import com.example.myapplication.ui.EnvironmentalColors
+import com.example.myapplication.ui.EnvironmentalMonitoringTheme
+import com.example.myapplication.ui.MetricCard
+import com.example.myapplication.ui.theme.SimpleLineChart
 
 //main screen of app
 //begining of the app
 class MainActivity : ComponentActivity(){
 
     //func runs when app starts
-    override fun onCreate(savedInstacesState: Bundle?){
-        super.onCreate(savedInstacesState)
+    override fun onCreate(savedInstaceState: Bundle?){
+        super.onCreate(savedInstaceState)
 
         //display the jetpack compose ui
         setContent {
@@ -86,9 +82,9 @@ fun DashboardScreen(){
         //row of two cards
         Row(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .padding(horizontal = 8.dp),
-                horizontalArrangement = Arrangement.spaceBy(8.dp)//space between cards
+                horizontalArrangement = Arrangement.spacedBy(8.dp)//space between cards
         ){
             //left card temp
             MetricCard(
@@ -116,7 +112,7 @@ fun DashboardScreen(){
             modifier = Modifier.padding(8.dp)
         ){
             //sample dat for chart
-            val co2Data = listOF(460f, 462f, 461f, 463f, 462f, 461f, 460)
+            val co2Data = listOf(460f, 462f, 461f, 463f, 462f, 461f, 460f)
 
             //diplay line chart
             SimpleLineChart(
@@ -155,22 +151,22 @@ fun DashboardScreen(){
             //colum with more metrics
             Column(
                 modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spaceBy(12.dp)
+                verticalArrangement = Arrangement.spacedBy(12.dp)
             ){
                 //pm2.5 metric
-                MetricRow(
+                MerticRow(
                     label = " PM2.5",
                     value = "12 µg/m³ "
                 )
 
                 //PM10 metric
-                MetricRow(
+                MerticRow(
                     label = "PM10",
                     value = "25 µg/m³"
                 )
 
                 //c02 level metric
-                MetricRow(
+                MerticRow(
                     label = "C0₂ Level",
                     value= "460 pm"
                 )
@@ -199,13 +195,13 @@ fun MerticRow(
         //label left
         Text(
             text = label,
-            color = EnvironmentalColors.TextScecondary,
+            color = EnvironmentalColors.TextSecondary,
             fontSize = 14.sp
         )
         //Value right
         Text(
             text = value,
-            color = EnvironmentalCOlors.TextPrimary,
+            color = EnvironmentalColors.TextPrimary,
             fontSize = 14.sp,
             fontWeight = FontWeight.SemiBold
         )

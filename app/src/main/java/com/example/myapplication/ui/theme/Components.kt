@@ -1,6 +1,5 @@
-package com.example.myapplication.ui.theme
+package com.example.myapplication.ui
 
-import androidx.compose.animation.expandHorizontally
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -91,7 +90,7 @@ fun AQIGauge( aqi: Int, modifier: Modifier = Modifier){
     ) {
         //displaying aqi value - status in center if gauage
         Column (
-            horizontalAlignment = LineHeightStyle.Alignment.CenterHorizontally,
+            horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ){
             Text(
@@ -115,9 +114,105 @@ fun AQIGauge( aqi: Int, modifier: Modifier = Modifier){
                 fontWeight = FontWeight.SemiBold
 
             )
+
         }
 
     }
 }
+//card shows a single metric ex temp or humidity
+@Composable
+fun MetricCard(
+    label: String,
+    value: String,
+    modifier: Modifier = Modifier
+){
+    //card -. raised container
+    Card(
+        modifier = modifier
+            .fillMaxWidth()//fill width of parent
+            .padding(8.dp),//add padding around card
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = EnvironmentalColors.CardBackground//dark card background
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)//shadow effect
+    ){
+        //arrange items vertically
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+            //center items horizontally
+        ){
+            //label text
+            Text(
+                label,
+                color = EnvironmentalColors.TextSecondary,// light grey color
+                fontSize =  12.sp,
+                fontWeight = FontWeight.Light
+            )
+            //space between label and value
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                value,
+                color = EnvironmentalColors.TextPrimary,
+                fontSize = 28.sp,
+                fontWeight = FontWeight.Bold
 
+            )
+        }
+
+    }
+
+    //simplelinechart -> displays data trends
+    @Composable
+    fun SimpleLineChart(
+        dataPoints: List<Float>,//list plot values
+        modifier: Modifier = Modifier,
+        height: Float = 100f//default height is 100 dp
+    ){
+        //return early if no data points
+        if(dataPoints.isEmpty()) return
+        Box(
+            //contain chart
+            modifier = modifier
+                .fillMaxWidth()
+                .height(height.dp)
+                .background(EnvironmentalColors.DarkBackground)
+            //dark background
+        ){
+            Canvas(
+                modifier = Modifier
+                    .fillMaxSize()//fill entire box
+                    .padding(8.dp)//add padding around chart
+            ) {
+                if (dataPoints.size < 2) return@Canvas
+                //find max and min values to scale
+                val maxValue = dataPoints.maxOrNull() ?: 1f
+                val minValue = dataPoints.maxOrNull() ?: 0f
+                val range = maxValue - minValue
+
+                //convert data points to screeen coordinates
+                val points = dataPoints.mapIndexed { index, value ->
+                    val x = (index.toFloat() / (dataPoints.size - 1)) * size.width
+                    val normalizedValue = if (range == 0f) 0.5f else(value - minValue)/ range
+                    val y = size.height - (normalizedValue * size.height)
+                    androidx.compose.ui.geometry.Offset(x, y)
+                }
+
+                for (i in 0 until points.size -1){
+                    // draw line connecting points
+                    drawLine(
+                        color = EnvironmentalColors.ChartCyan,
+                        start = points[i],//start
+                        end = points[i + 1],//end
+                        strokeWidth = 3f// thickness of line
+                    )
+                }
+
+            }
+        }
+    }
+}
 

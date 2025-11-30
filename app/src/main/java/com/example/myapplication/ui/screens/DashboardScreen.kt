@@ -1,9 +1,6 @@
 package com.example.myapplication.ui.screens
-//import layout component
-import  androidx.compose.runtime.Composable
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -11,119 +8,125 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
-
-//import color + styling
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
-//import custom components
-import com.example.myapplication.ui.theme.AQIGauge
-import com.example.myapplication.ui.components.MetricCard
+import com.example.myapplication.ui.components.AQIGauge
 import com.example.myapplication.ui.components.DashboardCard
+import com.example.myapplication.ui.components.MetricCard
 import com.example.myapplication.ui.components.SimpleLineChart
 import com.example.myapplication.ui.theme.EnvironmentalColors
+import com.example.myapplication.viewmodel.AppViewModel
 
-import androidx.compose.foundation.layout.Arrangement
-
-//1st screen user when app is open
+// Dashboard Screen - displays environmental data and GPS location
 @Composable
-fun DashboardScreen(){
-    //colum arranges items vertically
+fun DashboardScreen(viewModel: AppViewModel? = null) {
     Column(
         modifier = Modifier
-            .fillMaxSize() //fill entore screen
-            .padding(16.dp) //add padding around
-            .verticalScroll(rememberScrollState()), // allow scrolling if content too long
-
+            .fillMaxSize()
+            .padding(16.dp)
+            .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
-    ){
-        //Title
-        //Display screen title
+    ) {
+        // Title
         Text(
-            "Environmental Dashboard",
-            color = EnvironmentalColors.TextPrimary,
+            "Environmental Monitor",
             fontSize = 24.sp,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
+            color = EnvironmentalColors.TextPrimary
         )
-        //Add space between title + content
-        Spacer(modifier = Modifier.height(24.dp))
 
-        /// AQI Gauge Section ///
-        //diplay the circular air quality guage
-        DashboardCard(title = "Air Quality Index") {
-            AQIGauge(
-                aqi = 45,
-                modifier = Modifier.padding(16.dp)
-            )
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // GPS Location Card
+        if (viewModel != null) {
+            DashboardCard(
+                title = "📍 Current Location",
+                modifier = Modifier.padding(8.dp)
+            ) {
+                if (viewModel.hasLocation) {
+                    Text(
+                        "Latitude: ${String.format("%.4f", viewModel.userLatitude)}°\n" +
+                                "Longitude: ${String.format("%.4f", viewModel.userLongitude)}°",
+                        color = EnvironmentalColors.TextSecondary,
+                        fontSize = 14.sp
+                    )
+                } else if (viewModel.locationError != null) {
+                    Text(
+                        "Location Error: ${viewModel.locationError}",
+                        color = EnvironmentalColors.PoorRed,
+                        fontSize = 12.sp
+                    )
+                } else {
+                    Text(
+                        "Getting location...",
+                        color = EnvironmentalColors.TextTertiary,
+                        fontSize = 14.sp
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+
+        // AQI Gauge
+        DashboardCard(
+            title = "Air Quality Index",
+            modifier = Modifier.padding(8.dp)
+        ) {
+            AQIGauge(aqi = 45)
         }
 
         Spacer(modifier = Modifier.height(16.dp))
-    }
-    /// Temp + Humidity Section ///
-    //display temp + humidity in 2 cxards side by side
-    DashboardCard(title = "Current Conditions"){
-        //create row with 2 metric cars
-        Row(
-            modifier = Modifier.fillMaxSize(),// fill availble width
-        ){
-            //temp card
-            MetricCard(
-                label = "Temperature",
-                value = "24°C",
-                modifier = Modifier.weight(1f)
-            )
-            //Humidity card
-            MetricCard(
-            label = "Humidity",
-            value = "60%",
-            modifier = Modifier.weight(1f)//take half widith
-            )
-        }
 
-    Spacer(modifier = Modifier.height(16.dp))
-    ///C02 Chart Section //
-    //display c02 levels over last 24 hours
-    DashboardCard(title = "CO₂ Levels - 24h "){
-        //CO2 values in PMM
-        val co2Data = listOf(460f, 462f, 461f,463f, 462f, 461f, 460f)
-        SimpleLineChart(
-            dataPoints = co2Data,
-            height = 100f,
-            modifier = Modifier.padding(8.dp) //add padding around chart
-        )
-    }
-
-    Spacer(modifier = Modifier.height(16.dp))
-
-
-    /// PM2.5 + PM10 Section ///
-    DashboardCard(title = "Particulate Matter") {
-        Row(
-            modifier = Modifier.fillMaxSize(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        // Environmental Metrics
+        DashboardCard(
+            title = "Environmental Metrics",
+            modifier = Modifier.padding(8.dp)
         ) {
-            //Pm2.5 Card
-            MetricCard(
-                label = "PM2.5",
-                value = "12 µg/m³",
-                modifier = Modifier.weight(1f)
-            )
-            //PM10 card
-            MetricCard(
-                label = "PM10",
-                value = "25 µg/m³",
-                modifier = Modifier.weight(1f)
-            )
+            Column {
+                MetricCard(
+                    label = "Temperature",
+                    value = "23.5°C"
+                )
+                MetricCard(
+                    label = "Humidity",
+                    value = "65%"
+                )
+                MetricCard(
+                    label = "PM2.5",
+                    value = "35 µg/m³"
+                )
             }
         }
+
         Spacer(modifier = Modifier.height(16.dp))
 
+        // Temperature Trend
+        DashboardCard(
+            title = "Temperature Trend",
+            modifier = Modifier.padding(8.dp)
+        ) {
+            SimpleLineChart(
+                dataPoints = listOf(20f, 21f, 22f, 23f, 23.5f, 23f, 22f),
+                height = 150f
+            )
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Air Quality Trend
+        DashboardCard(
+            title = "Air Quality Trend",
+            modifier = Modifier.padding(8.dp)
+        ) {
+            SimpleLineChart(
+                dataPoints = listOf(50f, 48f, 45f, 42f, 40f, 42f, 45f),
+                height = 150f
+            )
+        }
     }
 }
-
-
-
-

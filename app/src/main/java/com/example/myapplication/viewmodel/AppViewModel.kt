@@ -5,58 +5,88 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 
-//appViewModels -> manges state of the app
-//keeps track pf screen current being displayed
-//manage data beening shared between screens
+// AppViewModel -> Manages state of the app
+// Keeps track of which screen is currently being displayed
+// Manages data being shared between screens
+// Manages GPS location data
 
-class AppViewModel : ViewModel(){
-    //tracks where screen is being displayed
+class AppViewModel : ViewModel() {
+    // Tracks which screen is being displayed
     var currentScreen by mutableStateOf("Dashboard")
-        private set //only this view model can chnage it
+        private set // Only this view model can change it
 
-    //stores currently selected env reading
+    // Stores currently selected environment reading
     var selectedReading by mutableStateOf<String?>(null)
         private set
 
-    //tracks if data is currently being load
+    // Tracks if data is currently being loaded
     var isLoading by mutableStateOf(false)
         private set
 
-    //stores an erro message
+    // Stores an error message
     var errorMessage by mutableStateOf<String?>(null)
         private set
 
+    // GPS Location data
+    var userLatitude by mutableStateOf(0.0)
+        private set
 
-    //changes the current screen
-    fun navigateTo(screenName: String){
-        //update cureentscreen to new screen  name
+    var userLongitude by mutableStateOf(0.0)
+        private set
+
+    var locationError by mutableStateOf<String?>(null)
+        private set
+
+    var hasLocation by mutableStateOf(false)
+        private set
+
+    // Changes the current screen
+    fun navigateTo(screenName: String) {
+        // Update currentScreen to new screen name
         currentScreen = screenName
 
-        //clear any error message when nav
+        // Clear any error message when navigating
         errorMessage = null
     }
 
-    //selcts a reading(atores which one was clicked)
+    // Selects a reading (stores which one was clicked)
     fun selectReading(readingId: String) {
-        //stores select reading id
+        // Stores selected reading id
         selectedReading = readingId
     }
-    //deselects the cureent reading
-    fun clearSelectedReading(){
-        //set selected reading back to null
+
+    // Deselects the current reading
+    fun clearSelectedReading() {
+        // Set selected reading back to null
         selectedReading = null
     }
-    //shows or hides the loading spinner
-    fun setLoading(loading: Boolean){
-        //updates isloading state
+
+    // Updates loading state
+    fun updateLoading(loading: Boolean) {
+        // Updates isLoading state
         isLoading = loading
     }
-    //shows an error message to the user
-    fun setError(message: String?){
-        //update error message
+
+    // Shows an error message to the user
+    fun setError(message: String?) {
+        // Update error message
         errorMessage = message
     }
 
+    // Update location from GPS sensor
+    fun updateLocation(latitude: Double, longitude: Double) {
+        // Store GPS coordinates
+        userLatitude = latitude
+        userLongitude = longitude
+        locationError = null
+        hasLocation = true
+    }
 
+    // Update location error message
+    // RENAMED from setLocationError to avoid JVM signature clash
+    fun updateLocationError(error: String) {
+        // Store error message
+        locationError = error
+        hasLocation = false
+    }
 }
-

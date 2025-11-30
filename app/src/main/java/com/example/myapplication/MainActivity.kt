@@ -1,94 +1,161 @@
 package com.example.myapplication
 
-//android core
+// Android core
 import android.os.Bundle
+import android.Manifest
+import android.content.pm.PackageManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 
-//compose runetime
+// Compose runtime
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.LaunchedEffect
 
-//layout
+// Layout
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 
-//costum theme
+// Custom theme
 import com.example.myapplication.ui.theme.EnvironmentalMonitoringTheme
 
-//3 screens
+// Three screens
 import com.example.myapplication.ui.screens.DashboardScreen
 import com.example.myapplication.ui.screens.MapScreen
 import com.example.myapplication.ui.screens.CommunityScreen
 
-//viewmodel state management
+// ViewModel state management
 import com.example.myapplication.viewmodel.AppViewModel
 
-//import bottom navigationBar
+// Import bottom navigation bar
 import com.example.myapplication.ui.components.BottomNavigationBar
 
+// Import location manager for GPS
+import com.example.myapplication.location.LocationManager
 
-//main screen of app
-//begining of the app
-class MainActivity : ComponentActivity(){
+// Main screen of app
+// Beginning of the app
+class MainActivity : ComponentActivity() {
+    private lateinit var locationManager: LocationManager
+    private var viewModelInstance: AppViewModel? = null
+    private val LOCATION_PERMISSION_REQUEST_CODE = 100
 
-    //func runs when app starts
-    override fun onCreate(savedInstanceState: Bundle?){
+    // Function runs when app starts
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //display  compose ui
+        // Initialize location manager
+        locationManager = LocationManager(this)
+
+        // Check if location permission is granted
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // Permission not granted, request it
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                LOCATION_PERMISSION_REQUEST_CODE
+            )
+        } else {
+            // Permission already granted, get location
+            getLocation()
+        }
+
+        // Display Compose UI
         setContent {
-            //dark theme with cyan colors
+            // Dark theme with cyan colors
             EnvironmentalMonitoringTheme {
-                //main dashboard screen
-                MainAppContent()
+                // Main dashboard screen
+                MainAppContent { viewModel ->
+                    viewModelInstance = viewModel
+                    getLocation()
+                }
             }
         }
     }
 
+    // Get location from GPS sensor
+    private fun getLocation() {
+        locationManager.getCurrentLocation(
+            onSuccess = { latitude, longitude ->
+                // Update ViewModel with location
+                viewModelInstance?.updateLocation(latitude, longitude)
+            },
+            onError = { error ->
+                // Handle error - UPDATED to use updateLocationError()
+                viewModelInstance?.updateLocationError(error)
+            }
+        )
+    }
+
+    // Handle permission request result
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted, get location
+                getLocation()
+            }
+        }
+    }
 }
 
-// main content of  the app
-//creates viewModel die state mangement
-//sets scaffold layout
-//display current screen
-//shows bottom nav Bar
-
+// Main content of the app
+// Creates ViewModel for state management
+// Sets Scaffold layout
+// Displays current screen
+// Shows bottom navigation bar
 @Composable
-fun MainAppContent(){
-    //viewmodel - manages screens
+fun MainAppContent(onViewModelReady: (AppViewModel) -> Unit) {
+    // ViewModel - manages screens and location
     val viewModel = remember { AppViewModel() }
-    Scaffold (
+
+    // Use LaunchedEffect for side effects (calling the callback)
+    LaunchedEffect(viewModel) {
+        onViewModelReady(viewModel)
+    }
+
+    Scaffold(
         bottomBar = {
             BottomNavigationBar(
                 currentScreen = viewModel.currentScreen,
-                onNavigate = { screenName -> // on click , navigate to that screen
+                onNavigate = { screenName ->
+                    // On click, navigate to that screen
                     viewModel.navigateTo(screenName)
                 }
             )
         }
-    ){ paddingValues ->
-        Column (
+    ) { paddingValues ->
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-        ){
-            //screen nav
-            when (viewModel.currentScreen){
+        ) {
+            // Screen navigation
+            when (viewModel.currentScreen) {
                 "Dashboard" -> {
-                    DashboardScreen()
+                    DashboardScreen(viewModel = viewModel)
                 }
                 "Map" -> {
-                    MapScreen()
+                    MapScreen(viewModel = viewModel)
                 }
-                "Community" ->{
+                "Community" -> {
                     CommunityScreen()
                 }
                 else -> {
-                    DashboardScreen()
+                    DashboardScreen(viewModel = viewModel)
                 }
             }
         }

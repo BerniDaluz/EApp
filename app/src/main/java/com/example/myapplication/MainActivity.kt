@@ -36,12 +36,14 @@ import com.example.myapplication.viewmodel.AppViewModel
 import com.example.myapplication.ui.components.BottomNavigationBar
 
 // Import location manager for GPS
-import com.example.myapplication.location.LocationManager
+import com.example.myapplication.sensors.LocationManager
+import com.example.myapplication.sensors.TemperatureManager
 
 // Main screen of app
 // Beginning of the app
 class MainActivity : ComponentActivity() {
     private lateinit var locationManager: LocationManager
+    private lateinit var temperatureManager : TemperatureManager
     private var viewModelInstance: AppViewModel? = null
     private val LOCATION_PERMISSION_REQUEST_CODE = 100
 
@@ -51,6 +53,8 @@ class MainActivity : ComponentActivity() {
 
         // Initialize location manager
         locationManager = LocationManager(this)
+
+        temperatureManager = TemperatureManager(this)
 
         // Check if location permission is granted
         if (ContextCompat.checkSelfPermission(
@@ -77,6 +81,7 @@ class MainActivity : ComponentActivity() {
                 MainAppContent { viewModel ->
                     viewModelInstance = viewModel
                     getLocation()
+                    startTemperatureListening()
                 }
             }
         }
@@ -95,6 +100,18 @@ class MainActivity : ComponentActivity() {
             }
         )
     }
+    private fun startTemperatureListening(){
+        temperatureManager.startListening(
+            onChanged = {
+                temp ->
+                viewModelInstance?.updateTemperature(temp)
+                viewModelInstance?.addTemperatureHistory(temp)
+            },
+            onError = { error ->
+                viewModelInstance?.setError("Temperature sensor error: $error" )
+            }
+        )
+    }
 
     // Handle permission request result
     override fun onRequestPermissionsResult(
@@ -109,6 +126,10 @@ class MainActivity : ComponentActivity() {
                 getLocation()
             }
         }
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        temperatureManager.stopListening()
     }
 }
 

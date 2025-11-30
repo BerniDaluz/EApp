@@ -1,4 +1,4 @@
-package com.example.myapplication.location
+package com.example.myapplication.sensors
 
 import android.content.Context
 import android.location.Location

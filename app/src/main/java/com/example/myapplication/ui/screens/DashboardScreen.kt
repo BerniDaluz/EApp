@@ -18,6 +18,7 @@ import com.example.myapplication.ui.components.AQIGauge
 import com.example.myapplication.ui.components.DashboardCard
 import com.example.myapplication.ui.components.MetricCard
 import com.example.myapplication.ui.components.SimpleLineChart
+import com.example.myapplication.ui.components.TemperatureCard
 import com.example.myapplication.ui.theme.EnvironmentalColors
 import com.example.myapplication.viewmodel.AppViewModel
 
@@ -113,6 +114,14 @@ fun DashboardScreen(viewModel: AppViewModel? = null) {
             SimpleLineChart(
                 dataPoints = listOf(20f, 21f, 22f, 23f, 23.5f, 23f, 22f),
                 height = 150f
+            )
+        }
+
+        //temp update
+        if (viewModel != null){
+            TemperatureCard(
+                temperature = viewModel.currentTemperature,
+                status = viewModel.temperatureStaus
             )
         }
 

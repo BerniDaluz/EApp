@@ -40,6 +40,18 @@ class AppViewModel : ViewModel() {
     var hasLocation by mutableStateOf(false)
         private set
 
+    //temp view update variables
+    //temp state
+    var currentTemperature by mutableStateOf(0f)
+        private set
+
+    var temperatureStaus by mutableStateOf("Normal")
+        private set
+
+    var temperatureHistory by mutableStateOf<List<Float>>(
+        emptyList())
+        private set
+
     // Changes the current screen
     fun navigateTo(screenName: String) {
         // Update currentScreen to new screen name
@@ -88,5 +100,26 @@ class AppViewModel : ViewModel() {
         // Store error message
         locationError = error
         hasLocation = false
+    }
+    //temp update fun
+    //dete status base on temp
+    fun updateTemperature(temp: Float){
+        currentTemperature = temp
+
+        temperatureStaus = when {
+            temp < 10f -> "Cold"
+            temp < 25f -> "Normal"
+            else -> "Hot"
+        }
+        //add to history
+        addTemperatureHistory(temp)
+    }
+    //add temp to history
+    fun addTemperatureHistory(temp: Float){
+        val newHistory = (temperatureHistory + temp).takeLast(24)
+        //keeping last 24 status
+        temperatureHistory = newHistory
+
+
     }
 }

@@ -28,7 +28,7 @@ class AppViewModel : ViewModel(){
 
 
     //changes the current screen
-    fun naviagteTo(screenName: String){
+    fun navigateTo(screenName: String){
         //update cureentscreen to new screen  name
         currentScreen = screenName
 
@@ -37,9 +37,9 @@ class AppViewModel : ViewModel(){
     }
 
     //selcts a reading(atores which one was clicked)
-    fun selectedReading(readingId: String) {
+    fun selectReading(readingId: String) {
         //stores select reading id
-        selectReading = readingId
+        selectedReading = readingId
     }
     //deselects the cureent reading
     fun clearSelectedReading(){

@@ -1,4 +1,4 @@
-package com.example.myapplication.ui.theme
+package com.example.myapplication.ui.components
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -8,8 +8,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.dp
-import com.example.myapplication.ui.EnvironmentalColors
+import com.example.myapplication.ui.theme.EnvironmentalColors
 
+//display data as line chart
 @Composable
 fun SimpleLineChart(
     dataPoints: List<Float>,
@@ -32,11 +33,11 @@ fun SimpleLineChart(
         val valueRange = if(maxDataValue - minDataValue == 0f)
             1f else maxDataValue - minDataValue
         val path = Path()
-
         val xStep =width/ (dataPoints.size -1).toFloat()
+
         dataPoints.forEachIndexed { index, value ->
             val x = index * xStep
-            val y = canvasHeight - ((value - minDataValue) / valueRange)
+            val y = canvasHeight - ((value - minDataValue) / valueRange) * canvasHeight
 
             if(index == 0){
                 path.moveTo(x,y)

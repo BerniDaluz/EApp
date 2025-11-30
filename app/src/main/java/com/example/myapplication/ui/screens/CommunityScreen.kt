@@ -14,14 +14,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -55,7 +47,7 @@ fun CommunityScreen(){
     ){
         Text(
             "Community Feed",
-            color = EnivronmentalColors.TextPrimary,
+            color = EnvironmentalColors.TextPrimary,
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold
         )
@@ -86,7 +78,7 @@ fun CommunityScreen(){
             Post(
                 id = "1",
                 userName = "John Smith",
-                content = "Great air quality today! AQi is at 45 in downtown area.",
+                content = "Great air quality today! AQI is at 45 in downtown area.",
                 likes = 12,
                 comments = 3
             ),
@@ -94,7 +86,7 @@ fun CommunityScreen(){
             //2
             Post(
                 id = "2",
-                userName = "jane Doe",
+                userName = "Jane Doe",
                 content = "High PM2.5 levels detected in downtown. Stay safe!",
                 likes = 8,
                 comments = 5
@@ -142,7 +134,7 @@ fun PostCard(post: Post){
     //raise container with shadow
     Card(
         modifier = Modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
             .padding(8.dp),
         shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp),
         //round corners
@@ -195,7 +187,7 @@ fun PostCard(post: Post){
                     //like count
                     Text(
                         "${post.likes}",
-                        color = EnvironmentalColors.Text.Tertiary,
+                        color = EnvironmentalColors.TextTertiary,
                         fontSize = 12.sp
                     )
                 }

@@ -4,14 +4,14 @@ import androidx.compose.runtime.Composable
 
 //import Layout components
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
@@ -45,12 +45,12 @@ fun MapScreen(){
             fontWeight = FontWeight.Bold
         )
 
-        androidx.compose.foundation.layout.Spacer(
+        Spacer(
             modifier = Modifier.padding(top = 16.dp)
         )
 
         ///Map Placeholder ///
-        androidx.compose.foundation.layout.Box(
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp),
@@ -58,7 +58,7 @@ fun MapScreen(){
         ){
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = androidx.compose.foundation.layout.Arrangement.Center,
+                verticalArrangement = Arrangement.Center,
                 modifier = Modifier.fillMaxSize()
             ){
                 // Icon placeholder
@@ -67,7 +67,7 @@ fun MapScreen(){
                     fontSize = 64.sp // large emoji
                 )
                 //explantion text
-                androidx.compose.foundation.layout.Spacer(
+                Spacer(
                     modifier = Modifier.padding( top = 16.dp)
                 )
 
@@ -77,7 +77,7 @@ fun MapScreen(){
                     fontSize = 20.sp,
                     fontWeight = FontWeight.SemiBold
                 )
-                androidx.compose.foundation.layout.Spacer(
+                Spacer(
                     modifier = Modifier.padding( top = 8.dp)
                 )
 
@@ -87,7 +87,7 @@ fun MapScreen(){
                     fontSize = 14.sp
                 )
                 //possible future implementation
-                androidx.compose.foundation.layout.Spacer(
+                Spacer(
                     modifier = Modifier.padding( top = 16.dp)
                 )
                 Text(
@@ -101,17 +101,17 @@ fun MapScreen(){
 
         //Info Section //
         //display info about map features
-        androidx.compose.foundation.layout.Spacer(
+        Spacer(
             modifier = Modifier.padding( top = 16.dp)
         )
 
         //info card
-        androidx.compose.material3.Card(
+        Card(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp),
-            shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp),
-            colors = androidx.compose.material3.CardDefaults.cardColors(
+            shape = RoundedCornerShape(16.dp),
+            colors = CardDefaults.cardColors(
                 containerColor = EnvironmentalColors.CardBackground
             )
         ){
@@ -126,7 +126,7 @@ fun MapScreen(){
                     fontWeight = FontWeight.Bold
                 )
                 //FEATURE 1
-                androidx.compose.foundation.layout.Spacer(
+                Spacer(
                     modifier = Modifier.padding(top = 8.dp)
                 )
                 Text(
@@ -135,7 +135,7 @@ fun MapScreen(){
                     fontSize = 14.sp
                 )
                 //feature 2
-                androidx.compose.foundation.layout.Spacer(
+                Spacer(
                     modifier = Modifier.padding(top = 4.dp)
                 )
                 Text(
@@ -144,7 +144,7 @@ fun MapScreen(){
                     fontSize = 14.sp
                 )
                 //feature 3
-                androidx.compose.foundation.layout.Spacer(
+                Spacer(
                     modifier = Modifier.padding( top = 4.dp)
                 )
                 Text(

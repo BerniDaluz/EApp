@@ -3,11 +3,13 @@ package com.example.myapplication.ui.screens
 import  androidx.compose.runtime.Composable
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.verticalScroll
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 
 //import color + styling
@@ -18,11 +20,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 //import custom components
-import com.example.myapplication.ui.components.AQIGauge
+import com.example.myapplication.ui.theme.AQIGauge
 import com.example.myapplication.ui.components.MetricCard
 import com.example.myapplication.ui.components.DashboardCard
 import com.example.myapplication.ui.components.SimpleLineChart
-import com.example.myapplication.ui.components.EnvironmentalColors
+import com.example.myapplication.ui.theme.EnvironmentalColors
+
+import androidx.compose.foundation.layout.Arrangement
 
 //1st screen user when app is open
 @Composable
@@ -34,12 +38,12 @@ fun DashboardScreen(){
             .padding(16.dp) //add padding around
             .verticalScroll(rememberScrollState()), // allow scrolling if content too long
 
-        horizontalALignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally
     ){
         //Title
         //Display screen title
         Text(
-            "Enviornmental Dashboard",
+            "Environmental Dashboard",
             color = EnvironmentalColors.TextPrimary,
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold
@@ -60,9 +64,9 @@ fun DashboardScreen(){
     }
     /// Temp + Humidity Section ///
     //display temp + humidity in 2 cxards side by side
-    DashboardCard(tit;le = "Current Conditions"){
+    DashboardCard(title = "Current Conditions"){
         //create row with 2 metric cars
-        androidx.compose.foundation.layout.Row(
+        Row(
             modifier = Modifier.fillMaxSize(),// fill availble width
         ){
             //temp card
@@ -73,7 +77,7 @@ fun DashboardScreen(){
             )
             //Humidity card
             MetricCard(
-            label = "humidity",
+            label = "Humidity",
             value = "60%",
             modifier = Modifier.weight(1f)//take half widith
             )
@@ -82,7 +86,7 @@ fun DashboardScreen(){
     Spacer(modifier = Modifier.height(16.dp))
     ///C02 Chart Section //
     //display c02 levels over last 24 hours
-    DashboardCard(tilte = "CO₂ Levels - 24h "){
+    DashboardCard(title = "CO₂ Levels - 24h "){
         //CO2 values in PMM
         val co2Data = listOf(460f, 462f, 461f,463f, 462f, 461f, 460f)
         SimpleLineChart(
@@ -97,9 +101,9 @@ fun DashboardScreen(){
 
     /// PM2.5 + PM10 Section ///
     DashboardCard(title = "Particulate Matter") {
-        androidx.compose.foundation.layout.Row(
+        Row(
             modifier = Modifier.fillMaxSize(),
-            horizontalArrangement = androidx.compose.founation, Arrangement.spacedBy(8.dp)
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             //Pm2.5 Card
             MetricCard(

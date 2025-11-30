@@ -2,6 +2,7 @@ package com.example.myapplication.ui.components
 
 //libs
 //material design nav var components
+import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Icon
@@ -11,7 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.LocationOn
-import androidx.compose.material.icons.filled.People
+import androidx.compose.material.icons.filled.Person
 
 //layout + modifier utilities
 import androidx.compose.foundation.layout.height
@@ -19,8 +20,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 //import color util
-import androidx.compose.ui.graphics.Color
 import com.example.myapplication.ui.theme.EnvironmentalColors
+
+import androidx.compose.runtime.Composable
 
 //nav bar at bottom of screen
 //3 nav buttins for home/map/people
@@ -66,7 +68,7 @@ fun BottomNavigationBar(
                 )
             },
             //if item currently seleceted?
-            selected = currentScreen == "Dashbord",
+            selected = currentScreen == "Dashboard",
             //what happens on user clicks item
             onClick = {
                 //call onNav with dashboard -> go to dashboard screen
@@ -102,7 +104,7 @@ fun BottomNavigationBar(
                 )
             },
             //is item currently selected?
-            selected = currentScreens == "Map",
+            selected = currentScreen == "Map",
 
             //what happens when user click
             onClick = {
@@ -116,7 +118,7 @@ fun BottomNavigationBar(
             //icon display
             icon = {
                 Icon(
-                    imageVector = Icons.Filled.People,//community icons
+                    imageVector = Icons.Filled.Person,//community icons
                     contentDescription = "Community", //desc fro access
 
                     //color icon base on item selection
@@ -141,7 +143,7 @@ fun BottomNavigationBar(
                 )
             },
             //is itemm selected
-            selected = currentScreens == "Community",
+            selected = currentScreen == "Community",
 
             onClick = {
                 //call onNav with "community"
@@ -152,8 +154,4 @@ fun BottomNavigationBar(
 
 
 }
-
-
-
-
 

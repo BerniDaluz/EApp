@@ -1,11 +1,32 @@
 package com.example.myapplication.ui.theme
 
+//color class compose
 import androidx.compose.ui.graphics.Color
 
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
+object EnvironmentalColors{
+    ///Background colors
+    val DarkBackground = Color(0xFF0A0E27)
+    val SurfaceColor = Color(0xFF1A1F3A)
+    val CardBackground = Color(0xFF151B33)
 
-val Purple40 = Color(0xFF6650a4)
-val PurpleGrey40 = Color(0xFF625b71)
-val Pink40 = Color(0xFF7D5260)
+    ///Accent Colors
+    val CyanAccent = Color(0xFF00D9FF)
+    val TurquoiseAccent = Color(0xFF00E5CC)
+    val GreenAccent = Color(0xFF00FF88)
+
+    ///Status colors
+    val GoodGreen = Color(0xFF00E5CC)
+    val ModerateYellow = Color(0xFFFFD700)
+    val PoorRed = Color(0xFFFF4444)
+
+    //Text colors
+    val TextPrimary = Color(0xFFFFFFFF)
+    val TextSecondary = Color(0xFFB0B8D4)
+    val TextTertiary = Color(0xFF7A8299)
+
+    //Chart Colors
+    val ChartCyan = Color(0xFF00D9FF)
+    val ChartGradientStart = Color(0xFF00D9FF)
+    val ChartGradientEnd = Color(0xFF0099CC)
+
+}
